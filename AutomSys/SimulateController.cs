@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace AutomSys
 {
@@ -14,18 +15,14 @@ namespace AutomSys
         private static int _minTimeBeforeNextEvent = 10;
         private static int _maxTimeBeforeNextEvent = 30;
 
-        public async static void Simulate(DataGrid grid)
+        public async static void Simulate(List<Automate> automates, EventsController eventsController)
         {
             if (onSimulate) return;
 
             Random rnd = new Random((int)DateTime.Today.Ticks);
             onSimulate = true;
 
-            var items = (grid.ItemsSource as IEnumerable<Automate>).ToArray();
-
-            if (items == null) return;
-
-            var count = items.Count();
+            var count = automates.Count();
             
             Task.Run(async () =>
             {
@@ -35,7 +32,7 @@ namespace AutomSys
 
                     var automateIndx = rnd.Next(0, count);
 
-                    items[automateIndx].DestroyAutomate();
+                    automates[automateIndx].DestroyAutomate();
                 }
             });
 
@@ -47,7 +44,7 @@ namespace AutomSys
 
                     var automateIndx = rnd.Next(0, count);
 
-                    var isSold = items[automateIndx].SellRandom();
+                    var isSold = automates[automateIndx].SellRandom();
 
                     if (!isSold)
                     {

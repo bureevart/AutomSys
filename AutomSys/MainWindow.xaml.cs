@@ -23,7 +23,7 @@ namespace AutomSys
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        private readonly EventsController _eventsController;
         private DispatcherTimer _timer;
 
         public bool SimulationStarted = false;
@@ -33,20 +33,20 @@ namespace AutomSys
         public MainWindow()
         {
             InitializeComponent();
+            EventGrid.ItemsSource = EventsController.Events;
+            _eventsController = new EventsController(EventGrid);
             SetTime();
             _timer = new DispatcherTimer();
 
             Automates = new List<Automate>
             {
-                new Automate((Image)this.FindName("Automate1"), Label1, AutomateStatuses.Green),
-                new Automate((Image)this.FindName("Automate2"), Label2, AutomateStatuses.Green),
-                new Automate((Image)this.FindName("Automate3"), Label3, AutomateStatuses.Green),
-                new Automate((Image)this.FindName("Automate4"), Label4, AutomateStatuses.Green)
+                new Automate((Image)this.FindName("Automate1"), Label1, AutomateStatuses.Green, _eventsController),
+                new Automate((Image)this.FindName("Automate2"), Label2, AutomateStatuses.Green, _eventsController),
+                new Automate((Image)this.FindName("Automate3"), Label3, AutomateStatuses.Green, _eventsController),
+                new Automate((Image)this.FindName("Automate4"), Label4, AutomateStatuses.Green, _eventsController)
             };
 
-            this.Grid.ItemsSource = Automates;
-
-
+            Grid.ItemsSource = Automates;
         }
 
 
@@ -59,43 +59,26 @@ namespace AutomSys
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            SimulationStarted = true;
+            SimulationStarted = !SimulationStarted;
 
-            Task.Run(() =>
+            if (SimulationStarted)
             {
-                SimulateController.Simulate(Grid);
-            });
+                var task = Task.Run(() =>
+                {
+                    SimulateController.Simulate(Automates, _eventsController);
+                });
+
+                _eventsController.AddEvent(sender, "Симуляция запущена");
+            }
+            else
+            {
+                //stop
+            }
+            StartSimulationButton.IsEnabled = !SimulationStarted;
+            StopSimulationButton.IsEnabled = SimulationStarted;
         }
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var image = (Image)sender;
-
-            var automate = Automate.FindImageBySource(Grid, image);
-
-            automate.FixAutomate();
-
-        }
-
-        private void Image_MouseDown_1(object sender, MouseButtonEventArgs e)
-        {
-            var image = (Image)sender;
-
-            var automate = Automate.FindImageBySource(Grid, image);
-
-            automate.FixAutomate();
-        }
-
-        private void Image_MouseDown_2(object sender, MouseButtonEventArgs e)
-        {
-            var image = (Image)sender;
-
-            var automate = Automate.FindImageBySource(Grid, image);
-
-            automate.FixAutomate();
-        }
-
-        private void Image_MouseDown_3(object sender, MouseButtonEventArgs e)
         {
             var image = (Image)sender;
 
@@ -109,22 +92,7 @@ namespace AutomSys
             SetTime();
 
             if (SimulationStarted)
-            {
-                /*foreach (var item in Grid.ItemsSource)
-                {
-                    if (((Automate)item).Status == AutomateStatuses.Green)
-                        ((Automate)item).DestroyAutomate();
-                }*/
-
                 Grid.Items.Refresh();
-            }
-        }
-
-        private void Grid_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var pos = e.GetPosition(Grid);
-
-            
         }
 
         private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)

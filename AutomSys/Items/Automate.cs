@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -16,13 +17,16 @@ namespace AutomSys.Items
         {
             get
             {
-                return _node.Name;
+                return _node.Dispatcher.Invoke(() =>
+                {
+                    return _node.Name;
+                });
             }
         }
 
         public string Status { get; set; }
 
-        private Image _node;
+        public Image _node;
 
         private Label _automateLabel;
 
@@ -30,16 +34,21 @@ namespace AutomSys.Items
 
         private List<string> _resources;
 
+        private EventsController _eventsController;
+
+        private int _maxItemsInAutomate = 4;
+
         public int ResourcesCount { get => _resources.Count; }
 
         public static List<string> ListStore = new List<string> { "Кола 0.5л", "Кола 1л", "Фанта 1л", "Миринда 1л", "Миринда 0.5л" };
 
-        public Automate(Image node, Label isEmptyLabel, string status)
+        public Automate(Image node, Label isEmptyLabel, string status, EventsController controller)
         {
             _node = node;
             _automateLabel = isEmptyLabel;
             Status = status;
             _resources = new List<string>();
+            _eventsController = controller;
         }
 
         public Automate()
@@ -57,6 +66,7 @@ namespace AutomSys.Items
 
             SetImageSource(DefaultValues.RedMachineSource);
             this.Status = AutomateStatuses.Red;
+            _eventsController.AddEvent(Name, "Автомат сломался!");
         }
 
         public async void FixAutomate()
@@ -67,10 +77,13 @@ namespace AutomSys.Items
             this.Status = AutomateStatuses.Yellow;
 
             _isFixing = true;
+            _eventsController.AddEvent(Name,"Починка началась!");
             await Task.Delay(5000);
             SetImageSource(DefaultValues.GreenMachineSource);
             this.Status = AutomateStatuses.Green;
             _isFixing = false;
+            _eventsController.AddEvent(Name, "Починка завершена!");
+
         }
 
         public bool CompareImageWithNode(Image img) => _node == img;
@@ -90,18 +103,26 @@ namespace AutomSys.Items
 
         public void FillItems()
         {
+            if(_resources.Count > _maxItemsInAutomate / 2) 
+            {
+                _eventsController.AddEvent(Name, "В автомате достаточно товара!");
+                return; 
+            }
+
             Random rnd = new Random((int)DateTime.Now.Ticks);
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < _maxItemsInAutomate; i++)
             {
                 _resources.Add(ListStore.ElementAt(rnd.Next(ListStore.Count)));
             }
 
             SetLabelFilled();
 
+            _eventsController.AddEvent(Name, "Восполнили до максимума!");
         }
 
         public bool SellRandom()
         {
+            var isLastItem = false;
             if (_resources.Count == 0)
             {
                 SetLabelEmpty();
@@ -112,9 +133,23 @@ namespace AutomSys.Items
                 return false;
             }
 
+            if (_resources.Count == 1)
+            {
+                isLastItem = true;
+            }
+
             Random rnd = new Random((int)DateTime.Now.Ticks);
 
-            _resources.Remove(_resources.ElementAt(rnd.Next(_resources.Count)));
+            var elToSell = _resources.ElementAt(rnd.Next(_resources.Count));
+
+            _resources.Remove(elToSell);
+
+            _eventsController.AddEvent(Name, $"Продано: {elToSell}");
+
+            if (isLastItem)
+            {
+                _eventsController.AddEvent(Name, "Нехватка товара!");
+            }
 
             return true;
         }

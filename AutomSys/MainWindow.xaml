@@ -10,21 +10,13 @@
 
 
     <Grid Margin="10,0,10,9">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="258*"/>
-            <RowDefinition Height="54*"/>
-            <RowDefinition Height="179*"/>
-        </Grid.RowDefinitions>
-        <Grid Margin="7,10,312,67" Grid.RowSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+        <Grid Margin="7,10,312,67">
 
             <Image x:Name="bg" Margin="16,19,16,19" Source="Images/bg.png"/>
             <Image x:Name="Automate1" Margin="66,87,426,218" Source="Images/green.png" MouseDown="Image_MouseDown" />
-            <Image x:Name="Automate2" Margin="298,87,194,218" Source="Images/green.png" MouseDown="Image_MouseDown_1" />
-            <Image x:Name="Automate3" Margin="66,227,426,78" Source="Images/green.png" MouseDown="Image_MouseDown_2" />
-            <Image x:Name="Automate4" Margin="298,227,194,78" Source="Images/green.png" MouseDown="Image_MouseDown_3" />
+            <Image x:Name="Automate2" Margin="298,87,194,218" Source="Images/green.png" MouseDown="Image_MouseDown" />
+            <Image x:Name="Automate3" Margin="66,227,426,78" Source="Images/green.png" MouseDown="Image_MouseDown" />
+            <Image x:Name="Automate4" Margin="298,227,194,78" Source="Images/green.png" MouseDown="Image_MouseDown" />
             <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="176,268,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_3"/>
             <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="176,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_1"/>
             <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="412,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
@@ -38,8 +30,8 @@
 
         </Grid>
 
-        <Button Content="Запустить симуляцию" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Click="Button_Click" Width="153" Height="33" Grid.Row="2"/>
-        <DataGrid x:Name="Grid" HorizontalAlignment="Left" Height="120" Margin="573,0,0,0" VerticalAlignment="Center" Width="255" d:ItemsSource="{d:SampleData ItemCount=5}" PreviewMouseDown="Grid_PreviewMouseDown" IsReadOnly="True">
+        <Button x:Name="StartSimulationButton" Content="Запустить симуляцию" HorizontalAlignment="Left" Margin="10,429,0,0" VerticalAlignment="Top" Click="Button_Click" Width="153" Height="33"/>
+        <DataGrid x:Name="Grid" HorizontalAlignment="Left" Height="120" Margin="573,69,0,0" VerticalAlignment="Top" Width="255" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">
                     <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick"/>
@@ -47,6 +39,8 @@
             </DataGrid.Resources>
         </DataGrid>
         <Label x:Name="TimeText" HorizontalAlignment="Left" Margin="573,34,0,0" VerticalAlignment="Top" Width="255" Height="30"/>
+        <DataGrid x:Name="EventGrid" HorizontalAlignment="Left" Height="120" Margin="574,194,0,0" VerticalAlignment="Top" Width="254" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True"/>
+        <Button x:Name="StopSimulationButton" Content="Остановить симуляцию" HorizontalAlignment="Left" Margin="168,429,0,0" VerticalAlignment="Top" Click="Button_Click" Width="153" Height="33" IsEnabled="False"/>
 
     </Grid>
 </Window>
