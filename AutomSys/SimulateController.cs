@@ -31,8 +31,8 @@ namespace AutomSys
                     await Task.Delay(rnd.Next(_minTimeBeforeNextEvent, _maxTimeBeforeNextEvent) * 1000);
 
                     var automateIndx = rnd.Next(0, count);
-
-                    automates[automateIndx].DestroyAutomate();
+                    if(onSimulate)
+                        automates[automateIndx].DestroyAutomate();
                 }
             });
 
@@ -43,14 +43,15 @@ namespace AutomSys
                     await Task.Delay(1000);
 
                     var automateIndx = rnd.Next(0, count);
-
-                    var isSold = automates[automateIndx].SellRandom();
-
-                    if (!isSold)
-                    {
-                    }
+                    if (onSimulate)
+                        automates[automateIndx].SellRandom();
                 }
             });
+        }
+        public static void StopSimulation()
+        {
+            if (!onSimulate) return;
+            onSimulate = false;
         }
     }
 }

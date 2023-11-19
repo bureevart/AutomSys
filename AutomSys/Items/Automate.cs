@@ -36,7 +36,7 @@ namespace AutomSys.Items
 
         private EventsController _eventsController;
 
-        private int _maxItemsInAutomate = 4;
+        private int _maxItemsInAutomate = 20;
 
         public int ResourcesCount { get => _resources.Count; }
 
@@ -110,7 +110,8 @@ namespace AutomSys.Items
             }
 
             Random rnd = new Random((int)DateTime.Now.Ticks);
-            for (int i = 0; i < _maxItemsInAutomate; i++)
+            var itemsToRestore = _maxItemsInAutomate - ResourcesCount;
+            for (int i = 0; i < itemsToRestore; i++)
             {
                 _resources.Add(ListStore.ElementAt(rnd.Next(ListStore.Count)));
             }

@@ -63,19 +63,35 @@ namespace AutomSys
 
             if (SimulationStarted)
             {
-                var task = Task.Run(() =>
+                Task.Run(() =>
                 {
                     SimulateController.Simulate(Automates, _eventsController);
                 });
 
                 _eventsController.AddEvent(sender, "Симуляция запущена");
             }
-            else
-            {
-                //stop
-            }
+
             StartSimulationButton.IsEnabled = !SimulationStarted;
+            await Task.Delay(5000);
             StopSimulationButton.IsEnabled = SimulationStarted;
+        }
+
+        private async void Button_Click5(object sender, RoutedEventArgs e)
+        {
+            SimulationStarted = !SimulationStarted;
+
+            if (!SimulationStarted)
+            {
+
+                SimulateController.StopSimulation();
+
+
+                _eventsController.AddEvent(sender, "Симуляция остановлена");
+            }
+
+            StopSimulationButton.IsEnabled = SimulationStarted;
+            await Task.Delay(5000);
+            StartSimulationButton.IsEnabled = !SimulationStarted;
         }
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
@@ -91,8 +107,7 @@ namespace AutomSys
         {
             SetTime();
 
-            if (SimulationStarted)
-                Grid.Items.Refresh();
+            Grid.Items.Refresh();
         }
 
         private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -131,7 +146,7 @@ namespace AutomSys
 
         public void FillAutomate(Automate automate)
         {
-            if (automate.ResourcesCount > 0) return;
+            //if (automate.ResourcesCount > 0) return;
             automate.FillItems(); 
             Grid.Items.Refresh();
         }
