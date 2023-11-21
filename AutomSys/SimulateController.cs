@@ -12,8 +12,8 @@ namespace AutomSys
     public class SimulateController
     {
         public static bool onSimulate = false;
-        private static int _minTimeBeforeNextEvent = 10;
-        private static int _maxTimeBeforeNextEvent = 30;
+        private static int _minTimeBeforeNextEvent = 7;
+        private static int _maxTimeBeforeNextEvent = 15;
 
         public async static void Simulate(List<Automate> automates, EventsController eventsController)
         {
@@ -30,9 +30,18 @@ namespace AutomSys
                 {
                     await Task.Delay(rnd.Next(_minTimeBeforeNextEvent, _maxTimeBeforeNextEvent) * 1000);
 
+                    var rndIndex = rnd.Next(0, 4);
+                    if (onSimulate && rndIndex == 0)
+                    {
+                        automates.ForEach(automate => automate.DestroyAutomate(true));
+                        eventsController.AddEvent("Система", "Авария в энергосистеме! Устройста были выключены.");
+                        continue;
+                    }
+
                     var automateIndx = rnd.Next(0, count);
-                    if(onSimulate)
-                        automates[automateIndx].DestroyAutomate();
+                    if (onSimulate) {
+                        automates[automateIndx].DestroyAutomate(false);
+                    }
                 }
             });
 

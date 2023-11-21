@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Resources;
 using System.Text;
@@ -12,7 +13,7 @@ namespace AutomSys.Items
 {
     public class Automate
     {
-
+        [DisplayName("Имя")]
         public string Name
         {
             get
@@ -23,7 +24,7 @@ namespace AutomSys.Items
                 });
             }
         }
-
+        [DisplayName("Состояние")]
         public string Status { get; set; }
 
         public Image _node;
@@ -37,10 +38,13 @@ namespace AutomSys.Items
         private EventsController _eventsController;
 
         private int _maxItemsInAutomate = 20;
-
+        [DisplayName("Количество, шт")]
         public int ResourcesCount { get => _resources.Count; }
 
         public static List<string> ListStore = new List<string> { "Кола 0.5л", "Кола 1л", "Фанта 1л", "Миринда 1л", "Миринда 0.5л" };
+
+        public static List<string> EventsList = new List<string> { "Отключилось электричество!", "Сломалось устройство выдачи!", "Клиент сообщил о поломке автомата!" };
+
 
         public Automate(Image node, Label isEmptyLabel, string status, EventsController controller)
         {
@@ -60,13 +64,17 @@ namespace AutomSys.Items
             await _node.Dispatcher.InvokeAsync(new Action(() => { _node.Source = source; }));
         }
 
-        public void DestroyAutomate()
+        public void DestroyAutomate(bool destroyedAll)
         {
             if (_isFixing) return;
 
             SetImageSource(DefaultValues.RedMachineSource);
             this.Status = AutomateStatuses.Red;
-            _eventsController.AddEvent(Name, "Автомат сломался!");
+            if (!destroyedAll)
+            {
+                Random rnd = new Random((int)DateTime.Now.Ticks);
+                _eventsController.AddEvent(Name, EventsList[rnd.Next(EventsList.Count)]);
+            }
         }
 
         public async void FixAutomate()

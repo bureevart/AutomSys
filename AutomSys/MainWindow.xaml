@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomSys"
         mc:Ignorable="d"
-        Title="Система контроля состояния торговых автоматов" Height="516" Width="900"
+        Title="Буреев А.С. ЭАС-412С.Система контроля состояния торговых автоматов" Height="516" Width="900"
         ResizeMode="NoResize" Loaded="Window_Loaded">
 
 
@@ -13,25 +13,27 @@
         <Grid Margin="7,10,312,67">
 
             <Image x:Name="bg" Margin="16,19,16,19" Source="Images/bg.png"/>
-            <Image x:Name="Automate1" Margin="66,87,426,218" Source="Images/green.png" MouseDown="Image_MouseDown" />
-            <Image x:Name="Automate2" Margin="298,87,194,218" Source="Images/green.png" MouseDown="Image_MouseDown" />
-            <Image x:Name="Automate3" Margin="66,227,426,78" Source="Images/green.png" MouseDown="Image_MouseDown" />
-            <Image x:Name="Automate4" Margin="298,227,194,78" Source="Images/green.png" MouseDown="Image_MouseDown" />
-            <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="176,268,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_3"/>
-            <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="176,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_1"/>
-            <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="412,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
-            <Button Content="Заполнить" HorizontalAlignment="Left" Height="21" Margin="412,268,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_4"/>
+            <Image x:Name="Automate1" ToolTip="Нажмите чтобы починить автомат." Margin="66,87,426,218" Source="Images/green.png" MouseDown="Image_MouseDown" AutomationProperties.HelpText="Нажми для починки" />
+            <Image x:Name="Automate2" ToolTip="Нажмите чтобы починить автомат." Margin="298,87,194,218" Source="Images/green.png" MouseDown="Image_MouseDown" AutomationProperties.HelpText="Нажми для починки" />
+            <Image x:Name="Automate3" ToolTip="Нажмите чтобы починить автомат." Margin="66,227,426,78" Source="Images/green.png" MouseDown="Image_MouseDown" AutomationProperties.HelpText="Нажми для починки" />
+            <Image x:Name="Automate4" ToolTip="Нажмите чтобы починить автомат." Margin="298,227,194,78" Source="Images/green.png" MouseDown="Image_MouseDown" AutomationProperties.HelpText="Нажми для починки" />
+            <Button Content="Заполнить" ToolTip="Нажмите чтобы заполнить автомат." HorizontalAlignment="Left" Height="21" Margin="176,268,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_3"/>
+            <Button Content="Заполнить" ToolTip="Нажмите чтобы заполнить автомат." HorizontalAlignment="Left" Height="21" Margin="176,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_1"/>
+            <Button Content="Заполнить" ToolTip="Нажмите чтобы заполнить автомат." HorizontalAlignment="Left" Height="21" Margin="412,131,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
+            <Button Content="Заполнить" ToolTip="Нажмите чтобы заполнить автомат." HorizontalAlignment="Left" Height="21" Margin="412,268,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_4"/>
             <Label x:Name="Label1" Content="Пусто!" HorizontalAlignment="Left" Height="24" Margin="176,102,0,0" VerticalAlignment="Top" Width="78" Foreground="Red"/>
             <Label x:Name="Label3" Content="Пусто!" HorizontalAlignment="Left" Height="24" Margin="176,239,0,0" VerticalAlignment="Top" Width="78" Foreground="Red"/>
             <Label x:Name="Label2" Content="Пусто!" HorizontalAlignment="Left" Height="24" Margin="412,102,0,0" VerticalAlignment="Top" Width="78" Foreground="Red"/>
             <Label x:Name="Label4" Content="Пусто!" HorizontalAlignment="Left" Height="24" Margin="412,239,0,0" VerticalAlignment="Top" Width="78" Foreground="Red"/>
+            <Label Content="В случае поломки автомата пожалуйста нажмите на его иконку в системе,&#xD;&#xA;или дважды нажмите на ячейку 'Cломан' в таблице автоматов." HorizontalAlignment="Left" Height="63" Margin="26,351,0,0" VerticalAlignment="Top" Width="525"/>
+            <Label Content="Лабораторная работа по дисциплине ПСРВ&#xD;&#xA;Выполнивший: студент 4 курса группы ЭАС-412С Буреев Артем Сергеевич" HorizontalAlignment="Center" Height="50" VerticalAlignment="Top" Width="509"/>
 
 
 
         </Grid>
 
-        <Button x:Name="StartSimulationButton" Content="Запустить симуляцию" HorizontalAlignment="Left" Margin="10,429,0,0" VerticalAlignment="Top" Click="Button_Click" Width="153" Height="33"/>
-        <DataGrid x:Name="Grid" HorizontalAlignment="Left" Height="120" Margin="573,69,0,0" VerticalAlignment="Top" Width="255" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True">
+        <Button x:Name="StartSimulationButton" ToolTip="Запуск симуляции по нажатию кнопки. Недоступна несколько секунд после нажатия." Content="Запустить симуляцию" HorizontalAlignment="Left" Margin="10,429,0,0" VerticalAlignment="Top" Click="Button_Click" Width="153" Height="33" AutomationProperties.HelpText="Запуск симуляции по нажатию кнопки. Недоступна несколько секунд после нажатия."/>
+        <DataGrid x:Name="Grid" HorizontalAlignment="Left" Height="120" Margin="573,69,0,0" VerticalAlignment="Top" Width="255" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True" AutoGenerateColumns="True" AutoGeneratingColumn="OnAutoGeneratingColumn">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridCell}">
                     <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick"/>
@@ -39,8 +41,8 @@
             </DataGrid.Resources>
         </DataGrid>
         <Label x:Name="TimeText" HorizontalAlignment="Left" Margin="573,34,0,0" VerticalAlignment="Top" Width="255" Height="30"/>
-        <DataGrid x:Name="EventGrid" HorizontalAlignment="Left" Height="230" Margin="574,194,0,0" VerticalAlignment="Top" Width="254" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True"/>
-        <Button x:Name="StopSimulationButton" Content="Остановить симуляцию" HorizontalAlignment="Left" Margin="168,429,0,0" VerticalAlignment="Top" Click="Button_Click5" Width="153" Height="33" IsEnabled="False"/>
+        <DataGrid x:Name="EventGrid" HorizontalAlignment="Left" Height="230" Margin="574,194,0,0" VerticalAlignment="Top" Width="254" d:ItemsSource="{d:SampleData ItemCount=5}" IsReadOnly="True" AutoGenerateColumns="True" AutoGeneratingColumn="OnAutoGeneratingColumn"/>
+        <Button x:Name="StopSimulationButton" ToolTip="Остановка симуляции по нажатию кнопки. Недоступна несколько секунд после нажатия." Content="Остановить симуляцию" HorizontalAlignment="Left" Margin="168,429,0,0" VerticalAlignment="Top" Click="Button_Click5" Width="153" Height="33" IsEnabled="False" AutomationProperties.HelpText="Остановка симуляции по нажатию кнопки. Недоступна несколько секунд после нажатия."/>
 
     </Grid>
 </Window>
